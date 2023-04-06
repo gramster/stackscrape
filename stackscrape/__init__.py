@@ -2,7 +2,7 @@
 stackscrape.
 
 Usage:
-  stackscrape [-s SITE] [-t TAG] [-f TEXT] [-d DAYS] [-n NUM] [-o OUT]
+  stackscrape [-s SITE] [-t TAG] [-f TEXT] [-d DAYS] [-n NUM] [-o OUT] [-m] [-S]
   stackscrape -h | --help
   stackscrape --version
 
@@ -15,12 +15,14 @@ Options:
   -d DAYS --days=DAYS     How many days back to go. [default: 365]
   -n NUM --num=NUM        Max number of items to fetch. [default: 1000]
   -o OUT --out=OUT        Save results to file OUT.
+  -m --merge              Merge title and question into one field.
+  -S --score              Include scores in output.
   -h --help               Show this screen.
   --version               Show version.
 
 """
 
-__version__ = '0.3'
+__version__ = '0.4'
 
 from docopt import docopt, DocoptExit
 from .stackscrape import get_qa
@@ -34,5 +36,7 @@ def main():
     days = int(arguments['--days'])
     num = int(arguments['--num'])
     out = arguments['--out']
-    get_qa(site, tag, text, days, num, out)
+    merge = bool(arguments['--merge'])
+    score = bool(arguments['--score'])
+    get_qa(site, tag, text, days, num, out, merge, score)
     

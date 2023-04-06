@@ -3,7 +3,8 @@ import json
 from stackapi import StackAPI, StackAPIError
 
 
-def get_qa(site: str, tag: str|None=None, text: str|None=None, days: int=365, num: int=1000, out: str|None=None) -> None:
+def get_qa(site: str, tag: str|None=None, text: str|None=None, days: int=365, num: int=1000, out: str|None=None,
+           merge: bool = False, score: bool = False) -> None:
     site = StackAPI(site, version='2.3')
     site.page_size = 100
     site.max_pages = ((num - 1) // 100) + 1
@@ -42,8 +43,7 @@ def get_qa(site: str, tag: str|None=None, text: str|None=None, days: int=365, nu
                 titles.append(item['title'])
                 questions.append(item['body_markdown'])
                 scores.append(item['score'])
-                #downvotes.append(item['down_vote_count'])
-                #upvotes.append(item['up_vote_count'])
+
                 
         while answer_ids:
             result = site.fetch('answers', ids=answer_ids[:100], filter='!)Q0*LNlnf79TzVMQwRAWZx-n')
@@ -53,14 +53,20 @@ def get_qa(site: str, tag: str|None=None, text: str|None=None, days: int=365, nu
 
         results = []
         for item in zip(titles, questions, answers, scores): #, upvotes, downvotes):
-            results.append({
-                'title': item[0],
-                'question': item[1],
-                'answer': item[2],
-                'score': item[3],
-                #'upvotes': item[4],
-                #'downvotes': item[5],
-            })
+            if merge:
+                result = {
+                    'prompt': f"{item[0]}\n\n{item[1]}",
+                    'response': item[2],
+                }
+            else:
+                result = {
+                    'title': item[0],
+                    'question': item[1],
+                    'answer': item[2],
+                }
+            if score:
+                result['score'] = item[3]
+            results.append(result)
         if out:
             with open(out, 'w') as f:
                 json.dump(results, f)
