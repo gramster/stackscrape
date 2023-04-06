@@ -20,7 +20,7 @@ Options:
 
 """
 
-__version__ = '0.2'
+__version__ = '0.3'
 
 from docopt import docopt, DocoptExit
 from .stackscrape import get_qa
@@ -30,7 +30,7 @@ def main():
     arguments = docopt(__doc__, version=__version__)
     site = arguments['--site']
     tag = arguments['--tag']
-    text = arguments['--text']
+    text = arguments['--filter']
     days = int(arguments['--days'])
     num = int(arguments['--num'])
     out = arguments['--out']
