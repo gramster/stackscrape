@@ -52,7 +52,7 @@ def get_qa(site: str, tag: str|None=None, text: str|None=None, days: int=365, nu
                 answers.append(item['body_markdown'])
 
         results = []
-        for item in zip(titles, questions, answers, scores) #, upvotes, downvotes):
+        for item in zip(titles, questions, answers, scores): #, upvotes, downvotes):
             results.append({
                 'title': item[0],
                 'question': item[1],

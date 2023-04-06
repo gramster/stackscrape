@@ -20,7 +20,7 @@ Options:
 
 """
 
-__version__ = '0.1'
+__version__ = '0.2'
 
 from docopt import docopt, DocoptExit
 from .stackscrape import get_qa
